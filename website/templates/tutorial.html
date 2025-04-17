@@ -136,11 +136,11 @@
             </div>
             <hr>
 
-            <h2 id="Optimisation_case_study" class="text-left"><u>Optimisation case study</u></h2>
+            <h2 id="Optimisation_case_study" class="text-left"><u>Single-fidelity optimisation case study</u></h2>
             <div class="row">
                 <div class="col-md-12">
                     <br>
-                    <p>We recommend that you start by exploring the <b>optimisation case study</b> provided. This will guide you through the basics of Web-BO using a sample dataset.</p>
+                    <p>We recommend that you start by exploring the <b>single-fidelity optimisation case study</b> provided. This will guide you through the basics of Web-BO using a sample dataset.</p>
 
                     <ol>
                         <li>
@@ -180,6 +180,79 @@
                                     <ul>
                                         <li>Navigate to the <em>Datasets</em> area of the home page and select the <em>sample-reizman-suzuki</em> dataset to load it.</li>
                                         <li>Identify the different variables in the parameter space and understand their roles.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                    <img src="{{ url_for('static', filename='sample_dataset.png') }}" class="img-fluid" alt="Description of the image" style="max-width: 65%; height: auto;">
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <b>Getting recommendations:</b>
+                                    <ul>
+                                        <li>Select <em>Setup your experiment.</em></li>
+                                        <li>Follow the methodology in section 5: <em> Getting recommendations & adding measurements</em>. </li>
+                                        <li>Note: Web-BO will show the measurements for you to submit, as you are not running the experiment.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                    <img src="{{ url_for('static', filename='set_up_case_study.png') }}" class="img-fluid" alt="Description of the image" style="max-width: 60%; height: auto;">
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <hr>
+
+            <h2 id="Optimisation_case_study" class="text-left"><u>Multi-fidelity optimisation case study</u></h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <p>If you are interested in using Web-BO for multi-fidelity optimisation, please start by exploring the <b>multi-fidelity optimisation case study</b> provided. This will guide you through the basics of Web-BO using a sample multi-fidelity dataset.</p>
+
+                    <ol>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <b>Navigate to the case study:</b>
+                                    <ul>
+                                        <li>Press the <em>Explore!</em> button on the home page, and read through the case study description.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                    <img src="{{ url_for('static', filename='explore.png') }}" class="img-fluid" alt="Description of the image" style="max-width: 40%; height: auto;">
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <b>Add the sample-reizman-suzuki multi-fidelity Dataset:</b>
+                                    <ul>
+                                        <li>Scroll to the bottom of the case study pop-up.</em></li>
+                                        <li>Enter a name for your sample dataset and select <em>'Explore MFBO'</em> to access the multi-fidelity dataset.</li>
+                                        <li>Your dataset will be added to the <em>Datasets</em> area of the home page. </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                    <img src="{{ url_for('static', filename='name_casestudy_dataset.png') }}" class="img-fluid" alt="Description of the image" style="max-width: 60%; height: auto;">
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <b>Explore Dataset Features:</b>
+                                    <ul>
+                                        <li>Navigate to the <em>Datasets</em> area of the home page and select the <em>sample-reizman-suzuki-mfbo</em> dataset to load it.</li>
+                                        <li>Identify the different variables in the parameter space and understand their roles. </li>
+                                        <li>Importantly, locate the <em>'fidelity'</em> column which contains discrete fidelity parameters associated with different data sources</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-5 d-flex justify-content-center align-items-center">
@@ -250,6 +323,22 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-7">
+                                    <b>Additional dataset information - csv files:</b>
+                                    <ul>
+                                        <li>Enter a name for your dataset and select the csv file</li>
+                                        <li><em>Dataset fidelity:</em> Characterise your dataset as single- or multi-fidelity.</li>
+                                        <li><em>Fidelity parameters:</em> When uploading a multi-fidelity dataset, you will be required to select the column in your dataset which contains fidelity parameters.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5 d-flex justify-content-center align-items-center">
+                                    <img src="{{ url_for('static', filename='single_or_multi_fidel.png') }}" class="img-fluid" alt="CSV Upload Option" style="max-width: 70%; height: auto;">
+                                </div>
+                            </div>
+                        </li>
+                        <br>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
                                     <b>Explore Dataset Features:</b>
                                     <ul>
                                         <li>Navigate to the <em>Datasets</em> area of the home page and select the dataset to load it.</li>
@@ -292,16 +381,31 @@
                             <div class="row align-items-center">
                                 
                                 <div class="col-md-7">
-                                    <b>Number of Objectives:</b>
+                                    <b>Number of Fidelities and Objectives:</b>
                                     <ul>
-                                        <li>Choose to create a <em>single-objective</em> or <em>multi-objective</em> optimisation experiment.</li>
-                                        <li>For a <em>multi-objective</em> optimisation experiment, you will be prompted to enter the number of targets you wish to optimise.</li>
+                                        <li>Enter the number of fidelities and objectives for your experiment.</li>
+                                        <li>These inputs will determine the type of optimization experiment that Web-BO can handle:
+                                            <ul style="list-style-type: disc;">
+                                                <li><em>Single-fidelity experiments:</em>
+                                                    <ul style="list-style-type: square;">
+                                                        <li>Single-objective</li>
+                                                        <li>Multi-objective</li>
+                                                    </ul>
+                                                </li>
+                                                <li><em>Multi-fidelity experiments:</em>
+                                                    <ul style="list-style-type: square;">
+                                                        <li>Single-objective</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
+                                    
                                 </div>
                         
                                 
                                 <div class="col-md-5 d-flex justify-content-center">
-                                    <img src="{{ url_for('static', filename='SO_or_MO_exp.png') }}" class="img-fluid" alt="Add Experiment" style="max-width: 70%; height: auto;">
+                                    <img src="{{ url_for('static', filename='no_obj_fidel.png') }}" class="img-fluid" alt="Add Experiment" style="max-width: 70%; height: auto;">
                                 </div>
                             </div>
                         </li>
@@ -313,6 +417,7 @@
                                     <b>Dataset Selection:</b>
                                     <ul>
                                         <li>Choose a dataset from those you have uploaded, give your experiment a unique name, and click <em>Submit Dataset</em>.</li>
+                                        <li>Please note, only datasets matching the fidelity level of the experiment being defined will be displayed.</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-5 d-flex justify-content-center align-items-center">
@@ -347,12 +452,13 @@
                                     <b>Hyperparameter Configuration:</b>
         
                                     <ul>
-                                        <li><em>GP Kernel Type:</em> Choose between <em>Matern</em> and <em>Tanimoto</em>.</li>
-                                        <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Acquisition Function:</em> Select <em>Expected Improvement</em> or <em>Probability of Improvement</em>.</li>
-                                        <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Batch Size:</em> Input the number of experiments to run before recieving new recommendations from Web-BO - see <em>FAQs</em> section for more details </li>
+                                        <li><em>GP Kernel Type:</em> Choose between <em>Matern</em> and <em>Tanimoto</em> for single-fidelity experiments.</li>
+                                        <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Acquisition Function:</em> Select <em>Expected Improvement</em> or <em>Probability of Improvement</em> for single-fidelity experiments. For multi-fidelity optimisations, a max-value entropy search acquisition function is used.</li>
+                                        <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Batch Size:</em> Input the number of experiments to run before recieving new recommendations from Web-BO for single-fidelity experiments - see <em>FAQs</em> section for more details </li>
                                         <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Target Variable(s):</em> Select the objective variable(s) you want to optimise - see FAQs section for more details.</li>
                                         <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Optimisation Type(s):</em> Indicate if you want to <em>Maximise</em> or <em>Minimise</em> the target variable(s).</li>
                                         <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Relative Weight (for multi-objective optimisations only):</em> Specify the relative importance of the targets - see <em>FAQs</em> section for more details</li>
+                                        <li style="margin-top: 0.35em; margin-bottom: 0.25em;"><em>Target fidelity (for multi-fidelity optimisations only):</em> Indicate the fidelity parameter which corresponds to the highest quality data source.</li>
                                     </ul>
                                     
                                 </div>

@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Upload{% endblock %}
 
 {% block content %}
+<!--
 <h2 align="left">Upload your data!</h2>
 </br>
 <form method="POST" enctype="multipart/form-data">
@@ -22,5 +23,108 @@
     </div>
 
 </form>
+
+
+<h2 align="left">Upload your data!</h2>
+</br>
+<form method="POST" enctype="multipart/form-data">
+    <div class="d-flex justify-content-center">
+        <div class="input-group w-auto">
+            <div class="col">
+                <input type="text" class="form-control" id="dataName" name="dataName" placeholder="Dataset Name" />
+            </div>
+            <div class="col">
+                <input class="form-control" type="file" id="formFile" name="formFile" placeholder="Example input"
+                    aria-label="Example input" aria-describedby="button-addon1" />
+            </div>
+            <div class="col">
+                <label for="datasetType">Dataset Type:</label>
+                <div>
+                    <input type="radio" id="singleFidelity" name="datasetType" value="single" checked>
+                    <label for="singleFidelity">Single Fidelity</label>
+                </div>
+                <div>
+                    <input type="radio" id="multiFidelity" name="datasetType" value="multi">
+                    <label for="multiFidelity">Multi Fidelity</label>
+                </div>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" type="submit" id="button-addon1" data-mdb-ripple-color="dark">
+                    Upload!
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+<div class="jumbotron">
+    <h1 class="display-4">Uploading your csv file</h1>
+    <hr class="my-4">
+    <h2 class="lead">Please tell us more about your file.</h2>
+</br>
+<form method="POST" enctype="multipart/form-data">
+    <div class="d-flex justify-content-center flex-column">
+        <!-- Dataset Name and File Input -->
+        <div class="input-group mb-3">
+            <div class="col">
+                <input type="text" class="form-control w-50" id="dataName" name="dataName" placeholder="Dataset Name" />
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="col">
+                <input class="form-control w-50" type="file" id="formFile" name="formFile" placeholder="Example input"
+                    aria-label="Example input" aria-describedby="button-addon1" />
+            </div>
+        </div>
+        <br>
+        <!-- Dataset Type Selection (Single or Multi Fidelity) -->
+        <!--
+        <div class="col mb-3">
+            <label for="datasetType">Dataset Type:</label>
+            <div>
+                <input type="radio" id="singleFidelity" name="datasetType" value="single" checked>
+                <label for="singleFidelity">Single Fidelity</label>
+            </div>
+            <div>
+                <input type="radio" id="multiFidelity" name="datasetType" value="multi">
+                <label for="multiFidelity">Multi Fidelity</label>
+            </div>
+        </div>
+    -->
+    <div class="col mb-3">
+        <h2 class="lead">Is this a single or multi-fidelity dataset</h2>
+        <label for="datasetType"></label>
+        <div>
+            <input type="radio" id="singleFidelity" name="datasetType" value="single" checked>
+            <label for="singleFidelity">Single Fidelity</label>
+            <p class="text-muted small mt-1">A single fidelity dataset contains data from only one source.</p>
+        </div>
+        <div>
+            <input type="radio" id="multiFidelity" name="datasetType" value="multi">
+            <label for="multiFidelity">Multi Fidelity</label>
+            <p class="text-muted small mt-1">A multi-fidelity dataset consists of data from different sources, which typically vary in accuracy and cost.</p>
+        </div>
+        <div class="alert alert-warning mt-3" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Important:</strong> For multi-fidelity datasets, please include a column specifying the fidelity level for each data point. Refer to the Multi-Fidelity Bayesian Optimisation (MFBO) case study for an example of the desired dataset format.
+        </div>
+    </div>
+    
+    
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-center mt-3">
+            <div class="col">
+                <button class="btn btn-primary" type="submit" id="button-addon1" data-mdb-ripple-color="dark">
+                    Upload!
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+
+
 
 {% endblock %}

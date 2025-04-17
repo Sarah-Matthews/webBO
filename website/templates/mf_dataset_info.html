@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block title %}Upload{% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron">
+    <h1 align="left">Multi-Fidelity Dataset Information</h1>
+    <hr class="my-4">
+
+    <p>Please select the <strong>fidelity parameter column</strong> in your dataset. This column should contain fidelity parameters specifying the level of accuracy associated with each data point, which correspond to a given data source.</p>
+    <br>
+    <form method="POST" action="{{ url_for('dataset_forms.multi_fidelity_info') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.fidelity_column.label(class="form-label") }}
+            {{ form.fidelity_column(class="form-control") }}
+            
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

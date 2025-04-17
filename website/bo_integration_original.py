@@ -11,7 +11,6 @@ import numpy as np
 import torch
 import json
 import random
-
 from baybe.recommenders.pure.bayesian import base, sequential_greedy
 from botorch import fit_gpytorch_mll
 from gpytorch.mlls.exact_marginal_log_likelihood import ExactMarginalLogLikelihood
@@ -65,8 +64,6 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
             allow_recommending_already_measured=False,
         )
     )
-
-    
 
     campaign = Campaign(
         searchspace=search_space,

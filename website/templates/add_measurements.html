@@ -56,17 +56,19 @@
                     {% for index, row in recs.iterrows() %}
                     <tr>
                         {% for column in recs.columns %}
+              
                         <td style="border: 1px solid black; background-color: rgb(226, 142, 205); padding: 8px; text-align: left; word-wrap: break-word; white-space: normal;">
-                            {% if column != 'iteration' and column not in target_names %}
+                            
+                            {% if column|string in target_names %}
+                                <input type="text" name={{ column }} id={{ column }} style="width: 80%; max-width: 150px;"/>
+                            {% elif column == 'iteration' %}
+                                {{ row[column] }}
+                            {% else %}
                                 {% if row[column] is number %}
                                     <input type="text" name={{ column }} id={{ column }} placeholder="{{ "%.3g" | format(row[column]) }}" style="width: 80%; max-width: 150px;"/>
                                 {% else %}
                                     <input type="text" name={{ column }} id={{ column }} placeholder="{{ row[column] }}" style="width: 80%; max-width: 150px;"/>
                                 {% endif %}
-                            {% elif column in target_names %}
-                                <input type="text" name={{ column }} id={{ column }} style="width: 80%; max-width: 150px;"/>
-                            {% else %}
-                                {{ row[column] }}
                             {% endif %}
                         </td>
                         {% endfor %}

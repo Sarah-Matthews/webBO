@@ -114,8 +114,11 @@
                                     </figure>
                                 </div>
                             </div>
+                            <br>
+                            <h4>Web-BO optimisation case studies:</h4>
+                            <br>
                             <p>
-                                This case study takes advantage of the experiment emulators offered by the <a
+                                Web-BO offers several case studies which take advantage of the experiment emulators offered by the <a
                                     href="https://github.com/sustainable-processes/summit" class="tooltip-test"
                                     title="Tooltip">Summit</a> package. Specifically, the <a
                                     href="https://gosummit.readthedocs.io/en/latest/experiments_benchmarks/implemented_benchmarks.html#cross-coupling-emulator-benchmarks"
@@ -123,7 +126,7 @@
                             </p>
                             <p>We will populate your Datasets with the new `sample-reizman-suzuki` dataset.</p>
 
-                            <p>Select 'Single Objective' or 'Multi Objective' below to explore the correct dataset for your desired optimisation case study.</p>
+                           
 
                             <p>When you close this popup, we'd recommend clicking on your new dataset to explore the
                                 Dataset features and set-up an experiment.</p>
@@ -141,17 +144,46 @@
 
                         </div>
                     -->
+                    <div class ="modal-body">
+                        <br>
+                             <h5>Single-fidelity Bayesian optimisation. </h5>
+                             <p>Enter a name, then select 'Single Objective' or 'Multi Objective' below to explore the correct dataset for your desired optimisation case study.</p>
+ 
+                             
+                     </div>
+                    
                     <div class="modal-footer">
                         <!--Form -->
                         <form method="POST" >
                             <label for="sample-dataset-name" class="form-label">Enter a name for your new dataset!</label>
                             <input type="text" class="form-control" id="sample-dataset-name" name="sample-dataset-name" placeholder="Dataset name" />
                             <br>
-                            <button type="submit" class="btn btn-secondary" name="action" value="add-sample-dataset">Single Objective</button>
-                            <button type="submit" class="btn btn-secondary" name="action" value="add-sample-dataset-mo">Multi-Objective</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="add-sample-dataset">Single Objective</button>
+                            <button type="submit" class="btn btn-primary" name="action" value="add-sample-dataset-mo">Multi-Objective</button>
                         </form>
                         
                     </div>
+                    <div class ="modal-body">
+                       <br>
+                            <h5>Multi-fidelity Bayesian optimisation. </h5>
+                            <p>Enter a name, then click the button below to access the dataset for the multi-fidelity case study. </p>
+                            <p><em>* Please note: Web-BO currently only offers multi-fidelity Bayesian optimisation for numerical parameters. As such, the catalyst parameter is fixed in this case study.</em></p>
+
+                            
+                    </div>
+                    <div class ="modal-footer d-flex justify-content-center">
+                        <form method="POST" >
+                      
+                            <label for="sample-dataset-name-mfbo" class="form-label">Enter a name for your new dataset!</label>
+                                <input type="text" class="form-control" id="sample-dataset-name-mfbo" name="sample-dataset-name-mfbo" placeholder="Dataset name" />
+                                <div class="modal-body d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary" name="action" value="add-sample-dataset-mfbo">Explore MFBO</button>
+                                </div>
+                        
+                            </form>
+                    </div>
+                    
+
                     
                     
 
@@ -288,10 +320,12 @@
         </div>
     </div>
 </div>
+
 <br />
 <div class="container mb-5">
     <form method="POST">
         <div class="row g-5">
+            
             <div class="col-md-6">
                 <div class="col-md-12" align="center">
                     <button type="submit" class="btn btn-secondary" name="action" value="add-dataset">Add
@@ -303,44 +337,71 @@
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#experimentModal" name="action" value="add-experiment">Add Experiment</button>
                 </div>
             </div>
+            </form>
             <!-- Modal -->
-            <div id="experimentModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Create Experiment</h4>
-                        </div>
-                    <div class="modal-body">
-                    <p>Do you want to create a <strong>single-objective</strong> or <strong>multi-objective</strong> experiment?</p>
-                    </div>
-                
-                    <div class="modal-footer">
-                        <form method="POST" id="experimentForm">
-                            <input type="hidden" name="action" value="add-experiment">
-                            <input type="hidden" name="experiment_type" id="experimentType">
-                        </form>
-                       
-                        <br>
-                       
-                        <button type="button" class="btn btn-primary" onclick="submitExperimentForm('single')">Single Objective</button>
-                        <button type="button" class="btn btn-primary" onclick="submitExperimentForm('multi')">Multi-Objective</button>
+            <div id="experimentModal" class="modal fade" tabindex="-1" aria-labelledby="experimentModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     
-                        <!-- Modal for entering the number of targets -->
-                        <div id="multiTargetModal" class="modal" style="display: none;">
-                            <div class="modal-content">
-                                <p>Please enter <strong>how many targets</strong> you would like to optimise:</p>
-                                <input type="number" id="numTargets" placeholder="Enter number of targets" min="1" style="width: 50%;"/>
-                                <button type="button" class="btn btn-primary" onclick="submitMultiObjective()">Submit</button>
+                    <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title" id="experimentModalLabel">Create Experiment</h2>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
+                        <div class="modal-body">
+                            <h4 class="fw-bold">Experimental Fidelities</h4>
+<hr class="mt-1 mb-4">
+<p>Fidelities describe the accuracy of data relative to the true quantity. Lower-fidelity methods are often cheaper but less precise, while high-fidelity methods provide more accurate results at a higher cost.</p>
+<p><i class="bi bi-exclamation-triangle"></i> <strong>Please note:</strong> Currently, Web-BO can only support numerical parameters and a single objective for multi-fidelity Bayesian optimisation.</p>
+<div class="text-center my-4">
+    <figure class="figure" style="max-width: 60%;">
+        <img src="{{ url_for('static', filename='fidelities_img.png') }}" class="img-fluid" alt="Types of experimental fidelities">
+        <figcaption class="figure-caption">Types of diferent experimental fidelities include physical experiments and computational simulations.</figcaption>
+    </figure>
+</div>
+
+<h4 class="fw-bold">Experimental Targets</h4>
+<hr class="mt-1 mb-4">
+<p>Optimisation experiments focus on specific targets, such as maximising reaction yield or minimising experimental cost. These targets guide the optimisation process to achieve desired outcomes efficiently.</p>
+
+<div class="text-center my-4">
+    <figure class="figure" style="max-width: 60%;">
+        <img src="{{ url_for('static', filename='targets_img.png') }}" class="img-fluid" alt="Common experimental targets">
+        <figcaption class="figure-caption">Common experimental targets include reaction yield, time and waste.</figcaption>
+    </figure>
+</div>
+                            <h4 class="fw-bold">Experiment Configuration</h4>
+                            <hr class="mt-1 mb-4">
+                            <form id="experimentForm" method="POST">
+                            <!-- Input for Number of Fidelities -->
+                                <div class="mb-3 row">
+                                    <label for="numFidelities" class="col-md-6 col-form-label">Number of Fidelities:</label>
+                                    <div class="col-md-6">
+                                        <input type="number" id="numFidelities" name="numFidelities" class="form-control" placeholder="Enter number of fidelities" min="1" required>
+                                    </div>
+                                </div>
+                    
+                            <!-- Input for Number of Targets -->
+                                <div class="mb-3 row">
+                                    <label for="numTargets" class="col-md-6 col-form-label">Number of Targets:</label>
+                                    <div class="col-md-6">
+                                        <input type="number" id="numTargets" name="numTargets" class="form-control" placeholder="Enter number of targets" min="1" required>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="submitExperimentInfo()">Submit</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    
 </div>
+
 
 <hr />
 <div class="container mt-5">
@@ -389,6 +450,9 @@
 </br>
 </br>
 </div>
+
+
+
 <style>
     
     .modal-header .close {

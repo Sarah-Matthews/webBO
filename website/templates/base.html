@@ -448,58 +448,91 @@
 
 
     <script>
-        function submitExperimentForm(type) {
-            let form = document.createElement("form");
-            form.method = "POST";
+        function submitExperimentInfo() {
+    const numFidelities = parseInt(document.getElementById('numFidelities').value, 10);
+    const numTargets = parseInt(document.getElementById('numTargets').value, 10);
+
+    // Validate input values
+    if (isNaN(numFidelities) || numFidelities <= 0) {
+        alert("Please enter a valid number of fidelities.");
+        return;
+    }
+    if (isNaN(numTargets) || numTargets <= 0) {
+        alert("Please enter a valid number of targets.");
+        return;
+    }
+
+    // Determine experiment type and fidelities
+    let experimentType = numTargets > 1 ? "multi-objective" : "single-objective";
+    let experimentFidelities = numFidelities > 1 ? "multi-fidelity" : "single-fidelity";
+
+    // Determine form action based on experiment type and fidelities
+    let formAction;
+    if (experimentType === "single-objective" && experimentFidelities === "single-fidelity") {
+        formAction = '/setup';
+    } else if (experimentType === "multi-objective" && experimentFidelities === "single-fidelity") {
+        formAction = '/setup_mo';
+    } else if (experimentType === "single-objective" && experimentFidelities === "multi-fidelity") {
+        formAction = '/setup_mfbo';
+    } else if (experimentType === "multi-objective" && experimentFidelities === "multi-fidelity") {
+        alert('Multi-fidelity optimization experiments with multiple targets are not currently supported.');
+        return;
+    } else {
+        alert('Please enter valid input values.');
+        return;
+    }
+
+    // Create a new form element
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.action = formAction;
+
+    // Add hidden input for action
+    let inputAction = document.createElement("input");
+    inputAction.type = "hidden";
+    inputAction.name = "action";
+    inputAction.value = "add-experiment";
+    form.appendChild(inputAction);
+
+    // Add hidden input for experiment type
+    let inputExperimentType = document.createElement("input");
+    inputExperimentType.type = "hidden";
+    inputExperimentType.name = "experiment_type";
+    inputExperimentType.value = experimentType;
+    form.appendChild(inputExperimentType);
+
+    // Add hidden input for experiment fidelities
+    let inputExperimentFidelities = document.createElement("input");
+    inputExperimentFidelities.type = "hidden";
+    inputExperimentFidelities.name = "experiment_fidelities";
+    inputExperimentFidelities.value = experimentFidelities;
+    form.appendChild(inputExperimentFidelities);
+
+    // Add hidden input for number of fidelities if applicable
+    if (experimentFidelities === "multi-fidelity") {
+        let inputNumFidelities = document.createElement("input");
+        inputNumFidelities.type = "hidden";
+        inputNumFidelities.name = "num_fidelities";
+        inputNumFidelities.value = numFidelities;
+        form.appendChild(inputNumFidelities);
+    }
+
+    // Add hidden input for number of targets if applicable
+    if (experimentType === "multi-objective") {
+        let inputNumTargets = document.createElement("input");
+        inputNumTargets.type = "hidden";
+        inputNumTargets.name = "num_targets";
+        inputNumTargets.value = numTargets;
+        form.appendChild(inputNumTargets);
+    }
+
+    // Append the form to the body and submit
+    document.body.appendChild(form);
+    form.submit();
+}
+
+ 
         
-            if (type === 'multi') {
-            // Show the modal when 'multi' is selected
-                document.getElementById("multiTargetModal").style.display = "block";
-            } else {
-                form.action = "/setup";  // Route to '/setup' for single-objective
-                let input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "experiment_type";
-                input.value = type;
-
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-
-        function submitMultiObjective() {
-         // Get the number of targets entered by the user
-            let numTargets = document.getElementById("numTargets").value;
-            if (!numTargets || numTargets <= 0) {
-            alert("Please enter a valid number of targets.");
-            } else if (numTargets == 1) {
-            alert("Please enter more than one target for a multi-objective experiment.");
-            } else {
-
-                let form = document.createElement("form");
-                form.method = "POST";
-                form.action = "/setup_mo";  // Route to '/setup_mo' for multi-objective
-            
-                let inputType = document.createElement("input");
-                inputType.type = "hidden";
-                inputType.name = "experiment_type";
-                inputType.value = "multi";
-                form.appendChild(inputType);
-            
-                let inputTargets = document.createElement("input");
-                inputTargets.type = "hidden";
-                inputTargets.name = "num_targets";
-                inputTargets.value = numTargets;
-                form.appendChild(inputTargets);
-            
-                document.body.appendChild(form);
-                form.submit();
-
-                // Hide the modal after submission
-                document.getElementById("multiTargetModal").style.display = "none";
-
-                }}
     </script>
 
     <script>

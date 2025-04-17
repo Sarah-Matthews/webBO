@@ -153,6 +153,42 @@
                 example input file (for this <b>variable</b>) would be column one of the image on the right (not including row 9).</p>
             <hr>
 -->
+            <h2 id="Types" class="text-left"><u>Types of Optimisation Experiments</u></h2>
+            <p>Web-BO can handle optimisation experiments of different fidelity levels and target numbers. </p>
+            <li><em>Single-fidelity experiments:</em>
+                <ul style="list-style-type: square;">
+                    <li>Single-objective</li>
+                    <li>Multi-objective</li>
+                </ul>
+            </li>
+            <li><em>Multi-fidelity experiments:</em>
+                <ul style="list-style-type: square;">
+                    <li>Single-objective</li>
+                </ul>
+            </li>
+            <br>
+            <h5>Experimental fidelities</h5>
+
+            
+            <p>Different experimental methods can be leveraged to obtain objective measurements. These methods can be referred to as 'fidelities', describing the accuracy of the obtained data relative to the true quantity.
+            <p>Examples of different fidelities can include incorporating experimental data and computational simulations. Typically, high-fidelity data is more expensive to obtain, as the cost frequently correlates with the accuracy. A multi-fidelity optimisation experiment leverages different fidelities to locate the optimal conditions.</p>
+            <p><i class="bi bi-exclamation-triangle"></i>  Currently, Web-BO can only support numerical parameters for multi-fidelity Bayesian Optimisation.</p>
+            <div class="text-center my-4">
+                <figure class="figure" style="max-width: 65%;">
+                    <img src="{{ url_for('static', filename='fidelities_fig.png') }}" class="img-fluid" alt="Multi-fidelity Bayesian Optimisation procedure">
+                    <figcaption class="figure-caption">Multi-fidelity Bayesian Optimisation procedure.</figcaption>
+                </figure>
+            </div>
+            
+
+            <h5 class="fw-bold">Experimental Targets</h5>
+            
+            <p>Targets in an optimisation experiment refer to the specific objectives or outcomes which you wish to focus on. Common targets include reaction yield and experimental cost, which are typically maximised and minimised, respectively.</p>
+            <p><i class="bi bi-exclamation-triangle"></i> Currently, Web-BO can only support single-objective experiments for multi-fidelity Bayesian optimisation.</p>
+            <br>
+            
+
+            <hr>
 
             <h2 id="How_To_Run_Locally" class="text-left"><u>How To Run Locally</u></h2>
             <p> In order to run the web-BO locally, open up your preferred command-line interface and enter the following commands: </p>

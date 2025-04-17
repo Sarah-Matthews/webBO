@@ -54,6 +54,9 @@
                                     <div class="form-card">
                                         <h2 class="fs-title">Define your parameter space</h2>
                                         <br />
+                                        <p style="background-color: #ffffcc;"><i class="bi bi-exclamation-triangle"></i> <strong>Please note:</strong> Currently, Web-BO can only support integer and continuous parameters for multi-fidelity Bayesian Optimisation.</p>
+                                        
+
                                         <h6>
                                             For every variable defining your search space, select the variable type, and
                                             include additional, requested information. For example, if 'Continous' is selected,
@@ -76,8 +79,7 @@
                                                     <option selected>Open this select menu</option>
                                                     <option value="int">Integer</option>
                                                     <option value="cont">Continuous</option>
-                                                    <option value="cat">Categorical</option>
-                                                    <option value="subs">Chemical</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -103,26 +105,13 @@
                                 <fieldset>
                                     <div class="form-card">
                                         <h2 class="fs-title">Select your hyperparameters</h2>
-                                        <div class="col">
-                                            {{ hyp_form.kernel.label }}
-                                            {{ hyp_form.kernel() }}
-                                        </div>
+                                        
                                         <div class="col">
                                             {{ hyp_form.acqFunc.label }}
                                             {{ hyp_form.acqFunc() }}
                                         </div>
                                         
-                                        <div class="col">
-                                            <!--{{ hyp_form.batch_size.label }}-->
-                                            <label for="{{ hyp_form.batch_size.id_for_label }}">
-                                                Batch size 
-                                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="right" 
-                                                        title="This determines the number of experiments it suggests you to run before coming back to web-BO. E.g. if you set batch size equal to 2, it will tell you to go to the lab and perform your experiment with 2 different sets of initial conditions and input them, before it gives you the next 2 sets of initial conditions based on your results">
-                                                    ?
-                                                </button>
-                                            </label>
-                                            {{ hyp_form.batch_size() }}
-                                        </div>
+                                    
                                         <div class="col">
                                             {{ data_form.target.label }}
                                             {{ data_form.target() }}
@@ -132,9 +121,23 @@
                                             {{ hyp_form.opt_type() }}
                                         </div>
                                         
+                                        <div class="col-md-6 mb-4">
+                                            <div class="mb-3 d-flex flex-column">
+                                            <label for="{{ hyp_form.fixed_cost.id_for_label }}">
+                                                Fixed cost per iteration
+                                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="right"
+                                                        title="This determines the baseline cost incurred from running either a single high or low-fidelity iteration. The fidelity-specific cost will be added to this to calculate a total cost per iteration by source. The fixed cost value can be set to zero. ">
+                                                    ?
+                                                </button>
+                                            </label>
+                                            {{ hyp_form.fixed_cost() }}
+                                            </div>
+                                        </div>
                                         
                                     </div>
-                                        
+
+                                    
+                                    
                                     
                                     
                                     <input type="button" name="previous" class="previous action-button-previous"

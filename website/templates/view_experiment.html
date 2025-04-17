@@ -6,7 +6,7 @@
     <h1 class="display-4">The {{expt_name}} experiment</h1>
     <p class="lead">Here, the parameters and search space of the {{expt_name}} is described.</p>
     <hr class="my-4">
-    {% if expt_name.endswith("-sample-reizman-mo") and df['iteration'].max() < 1 %} <div class="container">
+    {% if expt_name.endswith("-sample-reizman-mo") and max_iteration < 1 %} <div class="container">
         <h3>Start by getting the next recommendation!</h3>
         </br>
         <form method="POST">
@@ -66,6 +66,13 @@
     <h1 class="text-left mb-3">Graphical Visualisation</h1>
     <h5 class="text-left text-muted">
         Explore the trends and relationships in your experiment by creating interactive graphs. Use the drop-down menus below to select variables for the X and Y axes. 
+    <br>
+        <p>
+            {% if fidelity == 'MULTI' %}
+            <br>
+            Experimental results from different sources, labelled by fidelity parameters, will be distinguished by colour in the plots below.
+            {% endif %}
+        </p>
     </h5>
     <hr class="my-4">
 
@@ -119,13 +126,14 @@
 
 
 
-{% if "datalab" in dataset_name and df['iteration'].max() > 0 %}
+{% if "datalab" in dataset_name and max_iteration > 0 %}
 </br>
 <form method="POST">
     <button type="submit" class="btn btn-primary btn-lg" name="action" value="send" style="margin-right: 20px;">Send
         measurements to datalab!</button>
 </form>
 {% endif %}
+
 </br>
 <form method="POST">
     <div class="d-flex justify-content-center">
