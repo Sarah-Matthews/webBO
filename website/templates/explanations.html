@@ -81,6 +81,7 @@
         <a class="nav-link" href="#Examples">Examples</a>
         <!--<a class="nav-link" href="#Input_Data_Required_Format">Input Data: Required Format</a>-->
         <a class="nav-link" href="#How_To_Run_Locally">How To Run Locally</a>
+        <a class="nav-link" href="#background">Bayesian Optimisation Basics</a>
     </nav>
 </div>
 
@@ -152,9 +153,11 @@
             <p>When adding an experiment, if a categorical variable needs to be added while defining your parameter space it will ask for a <i>csv</i> file. An
                 example input file (for this <b>variable</b>) would be column one of the image on the right (not including row 9).</p>
             <hr>
+
+            
 -->
             <h2 id="Types" class="text-left"><u>Types of Optimisation Experiments</u></h2>
-            <p>Web-BO can handle optimisation experiments of different fidelity levels and target numbers. </p>
+            <p>Web-BO can handle optimisation experiments of different fidelity levels and target numbers. See the BO Basics section for more details. </p>
             <li><em>Single-fidelity experiments:</em>
                 <ul style="list-style-type: square;">
                     <li>Single-objective</li>
@@ -169,8 +172,8 @@
             <br>
             <h5>Experimental fidelities</h5>
 
-            
-            <p>Different experimental methods can be leveraged to obtain objective measurements. These methods can be referred to as 'fidelities', describing the accuracy of the obtained data relative to the true quantity.
+
+            <p>Different experimental methods can be leveraged to obtain objective measurements. These methods can be referred to as 'fidelities', describing the accuracy of the obtained data relative to the true quantity.</p>
             <p>Examples of different fidelities can include incorporating experimental data and computational simulations. Typically, high-fidelity data is more expensive to obtain, as the cost frequently correlates with the accuracy. A multi-fidelity optimisation experiment leverages different fidelities to locate the optimal conditions.</p>
             <p><i class="bi bi-exclamation-triangle"></i>  Currently, Web-BO can only support numerical parameters for multi-fidelity Bayesian Optimisation.</p>
             <div class="text-center my-4">
@@ -179,16 +182,64 @@
                     <figcaption class="figure-caption">Multi-fidelity Bayesian Optimisation procedure.</figcaption>
                 </figure>
             </div>
-            
+
 
             <h5 class="fw-bold">Experimental Targets</h5>
-            
+
             <p>Targets in an optimisation experiment refer to the specific objectives or outcomes which you wish to focus on. Common targets include reaction yield and experimental cost, which are typically maximised and minimised, respectively.</p>
             <p><i class="bi bi-exclamation-triangle"></i> Currently, Web-BO can only support single-objective experiments for multi-fidelity Bayesian optimisation.</p>
             <br>
-            
+
 
             <hr>
+
+
+            <h2 id="background" class="text-left"><u>Bayesian Optimisation Basics</u></h2>
+            <p>Whilst Web-BO provides a no-code interface for applying Bayesian Optimisation (BO), we believe it’s useful to outline the core principles behind the process. This section provides a beginner-friendly introduction to BO.</p> </br>
+            <h5><u>Single-Objective Bayesian Optimisation</u></h5>
+            <p>At its simplest, Bayesian Optimisation is used to optimise a single objective, such as maximising reaction yield or minimising waste in a chemical process.</p>
+             <p>The key components of BO are:</p>
+              <ul> 
+                <li><b>Surrogate model:</b> A machine learning model that approximates the relationship between experimental inputs (e.g., temperature, catalyst type) and outputs (e.g., reaction yield).</li> 
+                <li><b>Acquisition function:</b> A function that uses the surrogate model's predictions to decide the most promising conditions to try next. It balances: 
+                    <ul> 
+                        <li><b>Exploitation</b> – choosing inputs that the model predicts will give high performance,</li>
+                         <li><b>Exploration</b> – testing lesser explored areas where the model is uncertain.</li>
+                     </ul> 
+                    </li>
+                </ul>
+
+
+            <div class="text-center my-4">
+                <figure class="figure" style="max-width: 65%;">
+                    <img src="{{ url_for('static', filename='BO_iteration.png') }}" class="img-fluid" alt="one_iteration" style="max-width: 70%; height: auto;">
+                    <figcaption class="figure-caption">A single iteration within a Bayesian optimisation loop.</figcaption>
+                </figure>
+            </div>
+                
+            <p>In each optimisation cycle:</p> 
+            <ol> 
+                <li>The surrogate model predicts performance for different input conditions.</li> 
+                <li>The acquisition function selects the next condition(s) to test.</li> 
+                <li>An experiment is run with those conditions, and the results are added to the dataset.</li>
+                 <li>The model is updated with the new data, and the cycle repeats.</li> 
+            </ol> 
+     
+           
+            <p>This process continues until a predefined budget is reached or a satisfactory result is achieved.</p>
+               
+            <h5><u>Multi-Objective Bayesian Optimisation (MOBO)</u></h5>
+            <p>In some problems, we want to optimise more than one outcome - for example, maximising reaction yield while also minimising cost. This is where <b>Multi-Objective BO</b> comes in.</p> 
+            <p>MOBO seeks to find a balance (or trade-off) between objectives, producing a set of optimal solutions.</p> 
+
+            <h5><u>Multi-Fidelity Bayesian Optimisation (MFBO)</u></h5>
+            <p>Some experiments are expensive or time-consuming to run, while others are cheaper but typically less accurate. <b>Multi-Fidelity BO</b> uses information from different 'fidelities', as discussed within the <i>'Types of Optimisations'</i> section.</p> 
+            <p>MFBO balances cost and accuracy by using cheaper data when helpful and only relying on expensive data when necessary.</p>    
+            
+            <h5><u>Encoding Parameters in Chemistry</u></h5>
+            <p>BO algorithms are designed to handle numerical parameters such as temperature and pressure, however, for BO to work well for chemical problems, we must carefully encode any non-numerical experimental categorical parameters, such as catalyst or solvent choice, which are uploaded in <i>csv</i> format. This encoding is handled by Web-BO.</p>
+            <p> Additionally, Web-BO accommodates chemical parameters which are uploaded in the forms of SMILES strings, by encoding through one of three methods selected by the user - RDKit chemical descriptors, Mordred or Morgan encoding. These encoding methods translate molecular structures into vector representations.</p>
+          
 
             <h2 id="How_To_Run_Locally" class="text-left"><u>How To Run Locally</u></h2>
             <p> In order to run the web-BO locally, open up your preferred command-line interface and enter the following commands: </p>
