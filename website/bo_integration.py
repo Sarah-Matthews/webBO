@@ -168,6 +168,7 @@ def setup_mobo(expt_info, targets,  opt_types, weights, batch_size=1):
                           combine_func=expt_info.combine_func)
 
     recommender = TwoPhaseMetaRecommender(
+        switch_after=3,
         initial_recommender=RandomRecommender(),
         recommender=SequentialGreedyRecommender(
             surrogate_model=GaussianProcessSurrogate(),
