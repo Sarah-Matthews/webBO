@@ -1,26 +1,38 @@
-from baybe import Campaign
-from baybe.objective import Objective
-from baybe.parameters import CategoricalParameter, NumericalContinuousParameter, NumericalDiscreteParameter, SubstanceParameter
-from baybe.searchspace import SearchSpace
-from baybe.targets import NumericalTarget, TargetTransformation
-from baybe.recommenders import RandomRecommender, SequentialGreedyRecommender, TwoPhaseMetaRecommender
-from baybe.surrogates import GaussianProcessSurrogate
-from baybe.utils.dataframe import add_fake_results
-import pandas as pd
-import numpy as np
-import torch
 import json
 import random
 
+import numpy as np
+import pandas as pd
+import torch
+from baybe import Campaign
+from baybe.objective import Objective
+from baybe.parameters import (
+    CategoricalParameter,
+    NumericalContinuousParameter,
+    NumericalDiscreteParameter,
+    SubstanceParameter,
+)
+from baybe.recommenders import (
+    RandomRecommender,
+    SequentialGreedyRecommender,
+    TwoPhaseMetaRecommender,
+)
 from baybe.recommenders.pure.bayesian import base, sequential_greedy
+from baybe.searchspace import SearchSpace
+from baybe.surrogates import GaussianProcessSurrogate
+from baybe.targets import NumericalTarget, TargetTransformation
+from baybe.utils.dataframe import add_fake_results
 from botorch import fit_gpytorch_mll
-from gpytorch.mlls.exact_marginal_log_likelihood import ExactMarginalLogLikelihood
-from botorch.models.cost import AffineFidelityCostModel
 from botorch.acquisition.cost_aware import InverseCostWeightedUtility
-from botorch.models.gp_regression_fidelity import SingleTaskMultiFidelityGP
+from botorch.acquisition.max_value_entropy_search import (
+    qMultiFidelityMaxValueEntropy,
+)
 from botorch.acquisition.utils import project_to_target_fidelity
-from botorch.acquisition.max_value_entropy_search import qMultiFidelityMaxValueEntropy
-
+from botorch.models.cost import AffineFidelityCostModel
+from botorch.models.gp_regression_fidelity import SingleTaskMultiFidelityGP
+from gpytorch.mlls.exact_marginal_log_likelihood import (
+    ExactMarginalLogLikelihood,
+)
 
 
 def setup_bo(expt_info, target, opt_type, batch_size=1):
@@ -57,6 +69,7 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
   
   
     recommender = TwoPhaseMetaRecommender(
+        switch_after=3,
         initial_recommender=RandomRecommender(),
         recommender=SequentialGreedyRecommender(
             surrogate_model=GaussianProcessSurrogate(),
@@ -67,9 +80,7 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
     )
 
     
-    
-
-    
+    print('AUSTIN', recommender)
 
     campaign = Campaign(
         searchspace=search_space,
