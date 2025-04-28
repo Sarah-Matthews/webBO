@@ -67,6 +67,9 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
     )
 
     
+    
+
+    
 
     campaign = Campaign(
         searchspace=search_space,
@@ -84,8 +87,12 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
     campaign.add_measurements(data_df)
 
     print('campaign full', campaign)
+    rec = campaign.recommend(batch_size=batch_size)
+    print('rec in setup_bo', rec)
+    print('campaign after .recommend', campaign)
+    return campaign, rec #campaign.recommend(batch_size=batch_size)
     
-    return campaign #campaign.recommend(batch_size=batch_size)
+
 
 def run_bo(expt_info, batch_size):
     print('expt_info.campaign within run_bo', expt_info.campaign)
@@ -94,7 +101,9 @@ def run_bo(expt_info, batch_size):
  
     print('campaign within run_bo',campaign)
     print('measurements', campaign.measurements)
-    return campaign.recommend(batch_size=batch_size)
+    rec = campaign.recommend(batch_size=batch_size)
+    print('campaign after rec, run_bo', campaign)
+    return campaign, rec
 
 
 
@@ -173,6 +182,7 @@ def setup_mobo(expt_info, targets,  opt_types, weights, batch_size=1):
     campaign.add_measurements(data_df)
 
     print('campaign full', campaign)
+
     return campaign #campaign.recommend(batch_size=batch_size)
 
     

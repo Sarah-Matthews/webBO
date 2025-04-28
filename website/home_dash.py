@@ -188,11 +188,19 @@ def view_experiment(expt_name):
                 if expt_info.objective == "SINGLE":
                 # sobo
                     if expt_info.iterations_completed == 0:
-                        campaign = setup_bo(expt_info,  target=target_indices, opt_type=target_opt_types,  batch_size=expt_info.batch_size)
+                        campaign, recs = setup_bo(expt_info,  target=target_indices, opt_type=target_opt_types,  batch_size=expt_info.batch_size)
                         expt_info.campaign = campaign.to_json()
                         print('initial campaign saved')
-
-                    recs = run_bo(expt_info, batch_size=expt_info.batch_size)
+                        recs['iteration'] = df['iteration'].max() + 1
+                        expt_info.next_recs = recs.to_json()
+                        print('expt.next_recs', recs.to_json() )
+                    else:
+                        campaign, recs = run_bo(expt_info, batch_size=expt_info.batch_size)
+                        expt_info.campaign = campaign.to_json()
+                        print('campaign saved')
+                        recs['iteration'] = df['iteration'].max() + 1
+                        expt_info.next_recs = recs.to_json()
+                        print('expt.next_recs', recs.to_json() )
 
 
                 else:
@@ -201,16 +209,22 @@ def view_experiment(expt_name):
                         campaign = setup_mobo(expt_info,  targets=target_indices, opt_types=target_opt_types, weights=target_weights,  batch_size=expt_info.batch_size)
                         expt_info.campaign = campaign.to_json()
                         print('initial campaign saved')
-
-
-                    recs = run_bo(expt_info, batch_size=expt_info.batch_size)
+                        recs = run_bo(expt_info, batch_size=expt_info.batch_size)
+                        recs['iteration'] = df['iteration'].max() + 1
+                        expt_info.next_recs = recs.to_json()
+                        print('expt.next_recs', recs.to_json() )
+                    else:
+                        recs = run_bo(expt_info, batch_size=expt_info.batch_size)
+                        recs['iteration'] = df['iteration'].max() + 1
+                        expt_info.next_recs = recs.to_json()
+                        print('expt.next_recs', recs.to_json() )
 
                 
 
-                recs['iteration'] = df['iteration'].max() + 1
+                #recs['iteration'] = df['iteration'].max() + 1
                 print('campaign  print',expt_info.campaign)
                 print('campaign  print second',Campaign.from_config(expt_info.campaign))
-                print('recs df', recs)
+                print('recs stored', expt_info.next_recs)
                 
 
             elif expt_info.fidelity == 'MULTI':
@@ -232,8 +246,8 @@ def view_experiment(expt_name):
                         fixed_cost=fixed_cost)
                 
             
-            expt_info.next_recs = recs.to_json()
-            print('expt.next_recs', recs.to_json() )
+                expt_info.next_recs = recs.to_json()
+                print('expt.next_recs', recs.to_json() )
             
             expt_info.iterations_completed = expt_info.iterations_completed + 1
             expt_info.data = df.to_json(orient='records')
@@ -652,7 +666,7 @@ def view_dataset():
                 ),
                            
                     Fidelity(
-                    fidelity_parameter = float(0.1),
+                    fidelity_parameter = float(0.01),
                     target_fidelity = 'False',
                     fixed_cost = 0.0,
                     experiment_id=sample_experiment.id
