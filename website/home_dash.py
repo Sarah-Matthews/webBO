@@ -1,21 +1,31 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session, flash, make_response
-from flask_login import login_required, current_user
-from werkzeug.utils import secure_filename
-from . import db 
-import re
-import random
 import json
-from .models import Data, Experiment, Target, Fidelity
+import random
+import re
+
 import pandas as pd
+import plotly
 import plotly.express as px
 import plotly.graph_objects as go
-import plotly
-from flask import session
+from baybe import Campaign
+from flask import (
+    Blueprint,
+    flash,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
+from flask_login import current_user, login_required
 from summit.benchmarks import get_pretrained_reizman_suzuki_emulator
 from summit.utils.dataset import DataSet
-from .bo_integration import setup_bo,setup_mobo, run_bo, run_mfbo
+from werkzeug.utils import secure_filename
 
-from baybe import Campaign
+from . import db
+from .bo_integration import run_bo, run_mfbo, setup_bo, setup_mobo
+from .models import Data, Experiment, Fidelity, Target
 
 home_dash = Blueprint("home_dash", __name__)
 
@@ -547,7 +557,7 @@ def view_dataset():
                     n_targets = 1,
                     variables=json.dumps(variable_types),
                     kernel="Matern",
-                    acqFunc="qEI",
+                    acqFunc="PI",
                     batch_size=1,
                     next_recs=pd.DataFrame().to_json(orient="records"),
                     iterations_completed=0,
