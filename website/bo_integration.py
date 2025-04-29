@@ -25,11 +25,9 @@ from botorch.acquisition.max_value_entropy_search import qMultiFidelityMaxValueE
 
 def setup_bo(expt_info, target, opt_type, batch_size=1):
     variable_type_dict = pd.read_json(expt_info.variables)
-    print('variable_type_dict', variable_type_dict)
     baybe_paramter_list = []
     target = target[0]
     opt_type = opt_type[0]
-    print('target:',target, 'opt type', opt_type)
 
     columns = list(variable_type_dict.keys())
     target_name = columns[int(target)]
@@ -63,7 +61,8 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
             acquisition_function_cls=f"{expt_info.acqFunc}",
             allow_repeated_recommendations=False,
             allow_recommending_already_measured=False,
-        )
+        ),
+        switch_after=3
     )
 
     
@@ -77,32 +76,18 @@ def setup_bo(expt_info, target, opt_type, batch_size=1):
         objective=objective,
     )
     
-    print('campaign empty', campaign)
-
-    print('measurements', expt_info.data)
-    print('add measurements')
     data_json = json.loads(expt_info.data)
     data_df = pd.DataFrame(data_json)
-    print('data_df', data_df)
     campaign.add_measurements(data_df)
 
-    print('campaign full', campaign)
-    rec = campaign.recommend(batch_size=batch_size)
-    print('rec in setup_bo', rec)
-    print('campaign after .recommend', campaign)
-    return campaign, rec #campaign.recommend(batch_size=batch_size)
+    return campaign
     
 
 
 def run_bo(expt_info, batch_size):
-    print('expt_info.campaign within run_bo', expt_info.campaign)
 
     campaign = Campaign.from_config(expt_info.campaign)
- 
-    print('campaign within run_bo',campaign)
-    print('measurements', campaign.measurements)
     rec = campaign.recommend(batch_size=batch_size)
-    print('campaign after rec, run_bo', campaign)
     return campaign, rec
 
 
@@ -147,7 +132,6 @@ def setup_mobo(expt_info, targets,  opt_types, weights, batch_size=1):
                 NumericalContinuousParameter(f"{col}", bounds=(float(df['min']), float(df['max'])))
             )
 
-    print(targets_arr)
 
     search_space = SearchSpace.from_product(baybe_parameter_list)
     
@@ -163,7 +147,8 @@ def setup_mobo(expt_info, targets,  opt_types, weights, batch_size=1):
             acquisition_function_cls=f"{expt_info.acqFunc}",
             allow_repeated_recommendations=False,
             allow_recommending_already_measured=False,
-        )
+        ),
+        switch_after=3
     )
     campaign = Campaign(
         searchspace=search_space,
@@ -172,18 +157,11 @@ def setup_mobo(expt_info, targets,  opt_types, weights, batch_size=1):
     )
 
 
-    print('campaign empty', campaign)
-
-    print('measurements', expt_info.data)
-    print('add measurements')
     data_json = json.loads(expt_info.data)
     data_df = pd.DataFrame(data_json)
-    print('data_df', data_df)
     campaign.add_measurements(data_df)
 
-    print('campaign full', campaign)
-
-    return campaign #campaign.recommend(batch_size=batch_size)
+    return campaign
 
     
 

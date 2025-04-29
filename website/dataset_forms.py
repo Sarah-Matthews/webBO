@@ -114,7 +114,7 @@ def upload():
                         fidelity = 'SINGLE',
                         user_id=current_user.id
                     )
-                    print(input_data)
+
                     db.session.add(input_data)
                     db.session.flush()
                     db.session.commit()
@@ -146,11 +146,8 @@ def multi_fidelity_info():
         if form.validate_on_submit():
             fidelity_column = form.fidelity_column.data
             variable_df = pd.DataFrame(df.columns, columns=["variables"])
-            print(variable_df, 'before')
             variable_df = variable_df[variable_df.variables != fidelity_column]
-            print(variable_df, 'after')
             df['iteration'] = 0
-            print(fidelity_column)
             # Process the multi-fidelity data as needed
             input_data = Data(
                 name=f"{name}",
@@ -160,7 +157,7 @@ def multi_fidelity_info():
                 fidelity_column = fidelity_column,
                 user_id=current_user.id
             )
-            print(input_data)
+
             db.session.add(input_data)
             db.session.flush()
             db.session.commit()

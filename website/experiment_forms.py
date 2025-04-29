@@ -105,7 +105,7 @@ def setup():
     for data in current_user.datas:
         dataset_choices.append(data.name)
         measurement_choices[data.name] = list(pd.read_json(data.variables)['variables'])
-    print(measurement_choices)
+
     data_form = DatasetSelectionForm(form_name="data_select")
     data_form.dataset.choices = [(row.id, row.name) for row in Data.query.filter_by(user_id=current_user.id, fidelity = 'SINGLE')]
     data_form.target.choices = [(row.id, row.variables) for row in Data.query.filter_by(user_id=current_user.id, fidelity = 'SINGLE')]
@@ -170,8 +170,6 @@ def setup():
                         }
                     else:
                         flash('Min values MUST be less than max values.', category="error")
-            print(variable_types)
-            print('target value:',target)
           
 
             expt_info = Experiment(
@@ -194,10 +192,6 @@ def setup():
             
 
             columns = list(variable_types.keys())
-            print('name:',columns[int(target)], 'opt type:',opt_type_mapping[hyp_form.opt_type.data])
-            print(f"expt_info.id: {expt_info.id} (type: {type(expt_info.id)})")
-
-
             target_info = Target(
                     index=int(target),  
                     name=columns[int(target)] ,  
@@ -205,7 +199,6 @@ def setup():
                     weight = float(1.0),
                     experiment_id=expt_info.id  
                 )
-            print(target_info)
             db.session.add(target_info)
             db.session.flush()
             db.session.commit()
@@ -252,19 +245,14 @@ def setup_mo():
                 df = pd.read_json(dataset_info.variables)  
                 variables = df.get("variables", []).tolist()  
                 target_options = [(idx, var) for idx, var in enumerate(variables)]  
-                print(f"Target options available: {target_options}")
 
                 data_form.targets = [TargetForm() for _ in range(num_targets)]
-                print(f"Number of target forms: {len(data_form.targets)}")
+
 
                 for target_form in data_form.targets:
-                    print(f"Target form: {target_form}")
-                    print(f"Target field: {target_form.target}")
                     target_form.target.choices = target_options
                     target_form.optimisation.choices = ['maximise', 'minimise']
-                    
-                    print(f"Number of target forms: {len(data_form.targets)}")
-                    print(f"target choices: {target_form.target.choices}")
+
 
             except ValueError as e:
                 print(f"JSON error for dataset {dataset_info.id}: {e}")
@@ -282,8 +270,6 @@ def setup_mo():
     opt_type_mapping = {"maximise": "MAX", "minimise": "MIN"}
     hyp_form.combine_func.choices = ['Mean', 'Geometric mean']
     combine_func_mapping = {"Mean": "MEAN", "Geometric mean": "GEOM_MEAN"}
-    
-    print(hyp_form)
 
     if request.method == "POST":
         if 'expt_btn' in request.form:
@@ -302,7 +288,6 @@ def setup_mo():
                     'weight': weight_value
                 })
     
-            print('Extracted targets:', extracted_targets)
             
             variable_types = {}
             for index, variable in pd.read_json(dataset_info[0].variables).iterrows():
@@ -324,8 +309,7 @@ def setup_mo():
                         filename = secure_filename(datafile.filename)
                         datafile.save(filename)
                         df = pd.read_csv(filename, index_col=0)
-                    print(request.form.get(f"exampleRadios-{col}"))
-                    print(df.to_dict())
+
                     variable_types[f"{col}"] = {
                         "parameter-type": request.form.get(f"parameterspace-{col}"),
                         "json": df.to_dict()['smiles'],
@@ -349,9 +333,7 @@ def setup_mo():
                         }
                     else:
                         flash('Min values MUST be less than max values.', category="error")
-            print('variable types:',variable_types)
-            print('combine_func = ',combine_func_mapping[hyp_form.combine_func.data])
-            
+
             expt_info = Experiment(
                 name=data_form.name.data,
                 dataset_name=dataset_info[0].name,
@@ -376,16 +358,12 @@ def setup_mo():
             
             columns = list(variable_types.keys())
             targets = []
-            print()
+
             for idx, target_data in enumerate(extracted_targets):
                 
                 index = int(target_data['target'])
-                print('index', index)
-                print('name',columns[index])
                 opt_type = target_data['optimisation']
-                print('opt type', opt_type)
                 weight = float(target_data['weight'])
-                print('weight', weight)
 
                 target = Target(
                     index=index,  
@@ -425,7 +403,7 @@ def setup_mfbo():
     for data in current_user.datas:
         dataset_choices.append(data.name)
         measurement_choices[data.name] = list(pd.read_json(data.variables)['variables'])
-    print(measurement_choices)
+
 
     data_form = DatasetSelectionForm(form_name="data_select")
     data_form.dataset.choices = [(row.id, row.name) for row in Data.query.filter_by(user_id=current_user.id, fidelity = 'MULTI')]
@@ -433,8 +411,7 @@ def setup_mfbo():
     expt_names = [row.name for row in Experiment.query.filter_by(user_id=current_user.id)]
     if data_form.name.data in expt_names:
         flash("That name already exists!", category="error")
-    print('selected dataset', data_form.dataset.data)
-    print(request.form, 'request form ')
+
     unique_fidelity_values = []
     hyp_form = HyperparameterFormMFBO()
     #hyp_form.kernel.choices = ['Matern', 'Tanimoto']
@@ -444,19 +421,18 @@ def setup_mfbo():
     
     if request.method == 'POST':
         selected_dataset = data_form.dataset.data
-        print('selected_dataset', selected_dataset)
+
 
         if selected_dataset:
             selected_data = Data.query.filter_by(id=selected_dataset, user_id = current_user.id, fidelity = 'MULTI').first()
         
             if selected_data: #identifying the column containing fidelity parameters and extracting unique values
                 df_data = pd.read_json(selected_data.data)
-                print('selected_data.fidelity_column', selected_data.fidelity_column)
                 fidelity_column_name = selected_data.fidelity_column
 
                 if fidelity_column_name in df_data.columns:
                     unique_fidelity_values = df_data[f'{fidelity_column_name}'].unique()
-                    print(f"Unique fidelity values: {unique_fidelity_values}")
+
 
  
 
@@ -494,8 +470,6 @@ def setup_mfbo():
                         }
                     else:
                         flash('Min values MUST be less than max values.', category="error")
-            print(variable_types)
-            print('target value:',target)
             
 
             expt_info = Experiment(
@@ -518,9 +492,6 @@ def setup_mfbo():
             
             
             columns = list(variable_types.keys())
-            print('name:',columns[int(target)], 'opt type:',opt_type_mapping[hyp_form.opt_type.data])
-            print(f"expt_info.id: {expt_info.id} (type: {type(expt_info.id)})")
-
 
             target_info = Target(
                     index=int(target),  
@@ -529,24 +500,18 @@ def setup_mfbo():
                     weight = float(1.0),
                     experiment_id=expt_info.id  
                 )
-            print(target_info)
             db.session.add(target_info)
             db.session.flush()
 
             fidelities = []
             for fidelity_parameter in unique_fidelity_values:
-                print(unique_fidelity_values)
+
                 target_fidelity_value = max(unique_fidelity_values)
-                
-                print('fidelity_parameter', fidelity_parameter)
-                #print('hyp_form.target_fidelity.data', hyp_form.target_fidelity.data)
-                print('target_fidelity_value', target_fidelity_value)
                 
                 if fidelity_parameter == target_fidelity_value: #float(hyp_form.target_fidelity.data)
                     target_fidelity = 'True'
                 else:
                     target_fidelity = 'False'
-                print('target_fidelity', target_fidelity)
 
                 fixed_cost = hyp_form.fixed_cost.data
 
@@ -587,23 +552,15 @@ def add_measurements(expt_name):
     targets = Target.query.filter_by(experiment_id=expt_info.id).all()
     target_column_names=[]
     target_indices=[]
-
-    print('variable_list', variable_list)
     
     for target in targets:
             target_column_names.append(target.name)  
             target_indices.append(target.index)  
  
- 
-    
-    print("Targets:", target_column_names)  
-    print("Target indices:", target_indices)  
-
     for col in target_column_names:
         df[col] = df[col].apply(lambda x: f'{x}')
 
     recs = pd.read_json(expt_info.next_recs)
-    print('printing recs',recs)
 
     if len(recs.columns) < 1:
         recs = pd.DataFrame(columns=df.columns)
@@ -623,7 +580,6 @@ def add_measurements(expt_name):
         
         conditions = DataSet.from_df(data)
         emulator_output = emulator.run_experiments(conditions, rtn_std=True)
-        print(emulator_output)
         
         emulator_value = emulator_output.to_numpy()[0, 5] #* 10 #check
         if expt_info.fidelity == 'MULTI':
@@ -663,10 +619,7 @@ def add_measurements(expt_name):
                 if expt_info.fidelity == 'SINGLE': #update the campaign for baybe optimisations
                     
                     campaign = Campaign.from_json(expt_info.campaign)
-                    print('dataframe being added to campaign:', ndf)
                     campaign.add_measurements(ndf)
-                    print('added measurements')
-                    print('campaign.measurements ', campaign.measurements)
                     expt_info.campaign = campaign.to_json()
 
                 
@@ -702,7 +655,6 @@ def run_expt(expt_name):
     data_info = Data.query.filter_by(name=expt_info.dataset_name).first()
 
     recs = pd.read_json(expt_info.next_recs)
-    print('recs:',recs)
     
     targets = Target.query.filter_by(experiment_id=expt_info.id).all()
     
@@ -710,24 +662,18 @@ def run_expt(expt_name):
     target_column_names=[]
     target_indices=[]
 
-    
-    
     for target in targets:
             target_column_names.append(target.name)  
             target_indices.append(target.index) 
-    print('target_column_names', target_column_names)
     
     for col in target_column_names:
         data[col] = data[col].apply(lambda x: f'{x}')
         
-    print(target_column_names)
-
 
 
     graphs = {}
 
     for target_name in target_column_names:
-        print('run_ept target',target_name)
         fig = go.Figure()
 
         if expt_info.fidelity == 'SINGLE':
@@ -748,11 +694,11 @@ def run_expt(expt_name):
 
         elif expt_info.fidelity == 'MULTI':
             fidelity_column = data_info.fidelity_column
-            # Multi-fidelity plot, group by fidelity values
+            #Multi-fidelity plot, group by fidelity values
             unique_fidelities = data[fidelity_column].unique()
 
             colours = px.colors.sample_colorscale("blues", np.linspace(0.3, 0.7, len(unique_fidelities)))
-            colour_map = dict(zip(unique_fidelities, colours))  # Map fidelity values to colors
+            colour_map = dict(zip(unique_fidelities, colours))  #Map fidelity values to colors
 
             for fid in unique_fidelities:
                 subset = data[data[fidelity_column] == fid]
@@ -764,7 +710,7 @@ def run_expt(expt_name):
                     marker=dict(color=colour_map[fid])
                 ))
 
-            # Plot expected outcomes from `recs`
+            #Plot expected outcomes from recs
             unique_fidelities_recs = recs[fidelity_column].unique()
             for fid in unique_fidelities_recs:
                 subset_recs = recs[recs[fidelity_column] == fid]
@@ -776,7 +722,7 @@ def run_expt(expt_name):
                     marker=dict(symbol='triangle-up', size=10, color=colour_map.get(fid, 'black'))
                 ))
 
-        # General plot settings
+        #General plot settings
         fig.update_layout(
             xaxis_title="Iteration",
             yaxis_title=f"{target_name.title()}",
