@@ -66,7 +66,10 @@ To help you get familiar with all that Web-BO has to offer, we provide an optimi
 
 This case study concerns optimizing the coupling of 3-bromoquinoline with
 3,5-dimethylisoxazole-4-boronic acid pinacol ester in the presence of
-1,8-diazobicyclo[5.4.0]undec-7-ene (DBU) and THF/water, Figure 1.
+1,8-diazobicyclo[5.4.0]undec-7-ene (DBU) and THF/water, Figure 1. 
+
+Three variations of this case study exist to showcase the single-objective,
+multi-objective and multi-fidelity capabilities of Web-BO, respectively.
 
 <h5 align="center">
 <img src="./website/static/reizman_reaction.png"
